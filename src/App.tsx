@@ -1,6 +1,7 @@
 import React from "react";
-
 import Button, { ButtonTypes } from "./components/Button";
+import Title from "./components/Title";
+import TabsList from './components/TabsList';
 
 const App = () => {
   return (
@@ -26,6 +27,11 @@ const App = () => {
           alert("Error");
         }}
       />
+
+        <Title title={"Sign In"} />
+
+        <TabsList />
+
     </div>
   );
 };
