@@ -1,7 +1,8 @@
 import React from "react";
-import Button, { ButtonTypes } from "./components/Button";
+import Button, {ButtonTypes} from "./components/Button";
 import Title from "./components/Title";
 import TabsList from './components/TabsList';
+import CardsList from "./components/CardsList";
 
 const App = () => {
   return (
@@ -31,6 +32,8 @@ const App = () => {
         <Title title={"Sign In"} />
 
         <TabsList />
+
+        <CardsList />
 
     </div>
   );
