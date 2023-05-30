@@ -38,7 +38,7 @@ const Input: FC<InputProps> = ({
     };
 
     return (
-        <div>
+        <div className={styles.container}>
             <div className={styles.title}>{title}</div>
             {isTextarea ? <textarea {...inputProps} /> : <input {...inputProps} />}
             {errorText && <div className={styles.errorText}>{errorText}</div>}

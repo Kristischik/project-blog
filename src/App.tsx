@@ -5,6 +5,8 @@ import TabsList from './components/TabsList';
 import CardsList from "./components/CardsList";
 import Input from "./components/Input";
 import Username from "./components/Username";
+import SignUp from "./pages/SignUp";
+import RegistrationConfirmation from "./pages/RegistrationConfirmation";
 
 const App = () => {
 
@@ -53,6 +55,10 @@ const App = () => {
         />
 
         <Username username={"Kristina"} />
+
+        <SignUp />
+        <RegistrationConfirmation />
+
 
     </div>
   );
