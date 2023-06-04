@@ -37,9 +37,9 @@ const Card: FC<CardPostProps> = ({
                     <div className={styles['content-text']}>
                         <span className={styles['content-text-date']}>{date}</span>
                         <h2 className={styles['content-text-title']}>{title}</h2>
-                        <div className={type === CardPostTypes.Large? styles['content-text-description']: null}>
-                            <p >{text}</p>
-                        </div>
+                        {type === CardPostTypes.Large && (
+                            <div className={styles['content-text-description']}>{text}</div>
+                        )}
                     </div>
                     <div className={styles['content-img']}>
                         <img src={image} alt="#" />

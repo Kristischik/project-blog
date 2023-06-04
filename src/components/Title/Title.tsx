@@ -3,6 +3,7 @@ import styles from "./Title.module.scss";
 
 type TitleProps = {
     title: string;
+    className?: string;
 };
 
 const Title: FC<TitleProps> = ({ title }) => {

@@ -1,8 +1,6 @@
 import React, { useState } from "react";
+
 import Button, {ButtonTypes} from "./components/Button";
-import Title from "./components/Title";
-import TabsList from './components/TabsList';
-import CardsList from "./components/CardsList";
 import Input from "./components/Input";
 import Username from "./components/Username";
 import SignUp from "./pages/SignUp";
@@ -10,6 +8,8 @@ import RegistrationConfirmation from "./pages/RegistrationConfirmation";
 import SignIn from "./pages/SignIn";
 import Success from "./pages/Success";
 import SelectedPost from "./pages/SelectedPost";
+import Home from "./pages/Home";
+
 
 const App = () => {
 
@@ -43,11 +43,7 @@ const App = () => {
         }}
       />
 
-        <Title title={"Sign In"} />
-
-        <TabsList />
-
-        <CardsList />
+       <Home />
 
         <Input
             isTextarea
