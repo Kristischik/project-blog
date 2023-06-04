@@ -18,6 +18,7 @@
   min-width: 544px;
   border-radius: 4px;
   resize: none;
+  position: relative;
   &:hover,
   &:focus {
     border-color: $medium;
