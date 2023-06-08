@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 
 import styles from "./SelectedPost.module.scss";
-import {BookmarkIcon, DislikeIcon, LikeIcon} from "../../assets/icons";
+import {BookmarkIcon, DislikeIcon, LikeIcon} from "src/assets/icons";
 import Title from "../../components/Title";
 
 type CardPostProps =

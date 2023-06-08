@@ -1,4 +1,4 @@
-
+import {ReactElement} from "react";
 
 export type Post = {
     id?: number;
@@ -24,3 +24,9 @@ export type Tab = {
     disabled: boolean;
 };
 export type TabsListType = Tab[];
+
+export type Children = ReactElement | ReactElement[];
+export enum Theme {
+    Light = "light",
+    Dark = "dark",
+}

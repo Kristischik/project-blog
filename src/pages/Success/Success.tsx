@@ -1,6 +1,6 @@
 import React from "react";
 
-import FormPagesContainer from "../../components/FormPagesContainer";
+import FormPagesContainer from "src/components/FormPagesContainer";
 
 const Success = () => {
     return (

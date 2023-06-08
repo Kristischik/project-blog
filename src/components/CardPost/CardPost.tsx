@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import classNames from "classnames";
 import styles from "./CardPost.module.scss";
-import {BookmarkIcon, DislikeIcon, LikeIcon, MoreIcon} from "../../assets/icons";
+import {BookmarkIcon, DislikeIcon, LikeIcon, MoreIcon} from "src/assets/icons";
 
 
 export enum CardPostTypes {

@@ -2,7 +2,7 @@ import {useEffect, useMemo, useState} from "react";
 
 import Title from "../../components/Title";
 import CardsList from "../../components/CardsList";
-import { PostsList, TabsTypes } from "../../@types";
+import { PostsList, TabsTypes } from "src/@types";
 import TabsList from "../../components/TabsList";
 import styles from "./Home.module.scss";
 
