@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import { Theme } from "../../@types";
+import { Theme } from "src/@types";
 
 const initialValues = {
     themeValue: Theme.Light,
