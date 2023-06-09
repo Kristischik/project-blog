@@ -2,7 +2,10 @@ import React, { FC } from "react";
 
 import styles from "./SelectedPost.module.scss";
 import {BookmarkIcon, DislikeIcon, LikeIcon} from "src/assets/icons";
-import Title from "../../components/Title";
+import Title from "src/components/Title";
+import {useThemeContext} from "src/context/Theme";
+import classNames from "classnames";
+import {Theme} from "src/@types";
 
 type CardPostProps =
 {
@@ -17,8 +20,12 @@ const SelectedPost: FC<CardPostProps> = ({
                                      title,
                                  }) => {
 
+    const { themeValue } = useThemeContext();
+
     return (
-        <div className={styles.container}>
+        <div className={classNames(styles.container, {
+            [styles.darkContainer]: themeValue === Theme.Dark,
+        })}>
             <div className={styles.breadcrumbs}>
                 <span className={styles.link}>Home&nbsp;</span>
                 <span>| Post 11111</span>

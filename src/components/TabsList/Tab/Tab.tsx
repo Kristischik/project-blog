@@ -1,6 +1,8 @@
 import React, { FC, ReactElement } from "react";
 import classNames from "classnames";
 import styles from "./Tab.module.scss";
+import {useThemeContext} from "src/context/Theme";
+import {Theme} from "src/@types";
 
 
 type TabsProps = {
@@ -11,12 +13,16 @@ type TabsProps = {
 };
 
 const Tab: FC<TabsProps> = ({ title, onClick, disabled, active }) => {
+
+    const { themeValue } = useThemeContext();
+
     return (
         <div
             onClick={!disabled ? onClick : undefined}
             className={classNames(styles.tab, {
                 [styles.active]: active,
                 [styles.disabled]: disabled,
+                [styles.darkTab]: themeValue === Theme.Dark,
             })}
         >
             {title}

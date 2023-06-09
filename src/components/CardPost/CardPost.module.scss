@@ -83,6 +83,20 @@
       align-items: center;
     }
   }
+  .darkTitle {
+    color: $white;
+  }
+
+  .darkIconsLike {
+    svg > path {
+      fill: $white;
+    }
+  }
+  .darkIconsBook {
+    svg > path {
+      fill: $white;
+    }
+  }
 }
 
 .medium {
@@ -151,6 +165,19 @@
       display: flex;
       gap: 25px;
       align-items: center;
+    }
+  }
+  .darkTitle {
+    color: $white;
+  }
+  .darkIconsLike {
+    svg > path {
+      fill: $white;
+    }
+  }
+  .darkIconsBook {
+    svg > path {
+      fill: $white;
     }
   }
 }
@@ -223,4 +250,18 @@
       align-items: center;
     }
   }
+  .darkTitle {
+    color: $white;
+  }
+  .darkIconsLike {
+    svg > path {
+      fill: $white;
+    }
+  }
+  .darkIconsBook {
+    svg > path {
+      fill: $white;
+    }
+  }
 }
+

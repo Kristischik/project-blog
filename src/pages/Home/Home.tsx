@@ -2,9 +2,11 @@ import {useEffect, useMemo, useState} from "react";
 
 import Title from "../../components/Title";
 import CardsList from "../../components/CardsList";
-import { PostsList, TabsTypes } from "src/@types";
+import {PostsList, TabsTypes, Theme} from "src/@types";
 import TabsList from "../../components/TabsList";
 import styles from "./Home.module.scss";
+import {useThemeContext} from "src/context/Theme";
+import classNames from "classnames";
 
 const MOCK_ARRAY = [
     {
@@ -182,8 +184,12 @@ const Home = () => {
         }
     };
 
+    const { themeValue } = useThemeContext();
+
     return (
-        <div>
+        <div className={classNames(styles.container, {
+            [styles.darkContainer]: themeValue === Theme.Dark,
+        })}>
             <Title title={"Blog"} className={styles.pageTitle} />
             <TabsList
                 tabsList={tabsList}
