@@ -1,0 +1,45 @@
+@import "src/styles/colors";
+
+@mixin tab {
+  padding: 0 40px 24px 40px;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  color: $secondary;
+  border-bottom: 2px solid transparent;
+  text-align: center;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.all {
+  @include tab();
+}
+
+.favorites {
+  @include tab();
+  &:hover {
+    color: $primary;
+  }
+}
+
+.popular {
+  @include tab();
+}
+
+.disabled {
+  color: $gray;
+  &:hover {
+    cursor: not-allowed;
+    color: $gray;
+  }
+}
+
+.active {
+  border-bottom: 2px solid $secondary;
+  &:hover {
+    border-bottom: 2px solid $secondary;
+  }
+}
