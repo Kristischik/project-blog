@@ -1,0 +1,33 @@
+@import "src/styles/colors";
+
+.signUp {
+  color: $primary;
+  margin-left: 4px;
+  &:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+}
+.additionalInfo {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  color: $gray;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.forgotPassword {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  color: $secondary;
+  margin-top: -16px;
+  &:hover {
+    cursor: pointer;
+    text-decoration: underline;
+    color: $primary;
+  }
+}
