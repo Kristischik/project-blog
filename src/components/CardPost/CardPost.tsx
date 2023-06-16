@@ -13,22 +13,24 @@ export enum CardPostTypes {
 }
 
 type CardPostProps = {
-    type:CardPostTypes;
+    type: CardPostTypes;
     id?: number;
-    image: string;
+    image?: string;
     text?: string;
-    date: string;
+    date?: string;
     lesson_num?: number;
-    title: string;
+    title?: string;
     author?: number;
+    onMoreClick?: () => void;
 };
 
 const Card: FC<CardPostProps> = ({
                                      type,
-                                     image,
-                                     text,
                                      date,
                                      title,
+                                     text,
+                                     image,
+                                     onMoreClick,
 
                              }) => {
     const cardStyle = styles[type];
@@ -64,7 +66,11 @@ const Card: FC<CardPostProps> = ({
                     })}
                     >
                         <BookmarkIcon />
-                        <MoreIcon/>
+                        {onMoreClick && (
+                            <div onClick={onMoreClick}>
+                                <MoreIcon />
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

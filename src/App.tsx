@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 
 // import Button, {ButtonTypes} from "./components/Button";
 // import Input from "./components/Input";
 // import SelectedPost from "./pages/SelectedPost";
 import {ThemeProvider} from "src/context/Theme";
-import ThemeSwitcher from "src/components/ThemeSwitcher";
+// import ThemeSwitcher from "src/components/ThemeSwitcher";
 import {Theme} from "src/@types";
 import Router from "src/pages/Router";
-
+import { useDispatch, useSelector } from "react-redux";
+import { setThemeValue, ThemeSelectors } from "src/redux/reducers/themeSlice";
 
 const App = () => {
 
@@ -17,20 +18,36 @@ const App = () => {
     //     setInputValue(value);
     // };
 
-    // Темная и светлая темы
-    const [themeValue, setThemeValue] = useState<Theme>(Theme.Light);
+    // // Темная и светлая темы Контекст
+    // const [themeValue, setThemeValue] = useState<Theme>(Theme.Light);
+    //
+    // const onChangeTheme = (value: Theme) => () => {
+    //     setThemeValue(value);
+    // };
 
+    //Используем Redux
+    const dispatch = useDispatch();
+
+    //то, что данные из редакса достает
+    const themeValue = useSelector(ThemeSelectors.getThemeValue);
     const onChangeTheme = (value: Theme) => () => {
-        setThemeValue(value);
+        dispatch(setThemeValue(value)); // то, что швыряет в редакс данные
     };
+
 
     return (
 
-        // Использование контекста для темной темы
         <ThemeProvider themeValue={themeValue} onChangeTheme={onChangeTheme}>
             <Router />
-            <ThemeSwitcher />
         </ThemeProvider>
+
+
+
+
+        // // Использование контекста для темной темы
+        // <ThemeProvider themeValue={themeValue} onChangeTheme={onChangeTheme}>
+        //     <Router />
+        // </ThemeProvider>
 
 
     // <div>
@@ -77,6 +94,9 @@ const App = () => {
     //     title={'Как упростить авиапутешествия по Европе'}></SelectedPost>
     //
     // </div>
+
+
+
   );
 };
 

@@ -7,6 +7,7 @@ import TabsList from "../../components/TabsList";
 import styles from "./Home.module.scss";
 import {useThemeContext} from "src/context/Theme";
 import classNames from "classnames";
+import SelectedPostModal from "src/pages/Home/SelectedPostModal";
 
 const MOCK_ARRAY = [
     {
@@ -197,6 +198,7 @@ const Home = () => {
                 onTabClick={onTabClick}
             />
             <CardsList cardsList={cardsList} />
+            <SelectedPostModal />
         </div>
     );
 };
