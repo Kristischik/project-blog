@@ -1,0 +1,16 @@
+@import "src/styles/colors";
+
+.additionalInfo {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  color: $gray;
+  flex: 1;
+  display: flex;
+  justify-content: left;
+  margin-top: 24px;
+}
+
+.darkAdditionalInfo{
+  color: $white;
+}

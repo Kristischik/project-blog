@@ -15,10 +15,8 @@
   font-size: 16px;
   line-height: 20px;
   color: $secondary;
-  min-width: 544px;
   border-radius: 4px;
   resize: none;
-  position: relative;
   &:hover,
   &:focus {
     border-color: $medium;
@@ -54,4 +52,10 @@
 
 .errorInput {
   border-color: $error;
+}
+
+.darkContainer {
+  .title {
+    color: $white;
+  }
 }
