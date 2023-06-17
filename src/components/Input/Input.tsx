@@ -5,13 +5,14 @@ import {useThemeContext} from "src/context/Theme";
 import {Theme} from "src/@types";
 
 type InputProps = {
-    title: string;
+    title?: string;
     placeholder: string;
     onChange: (value: string) => void;
     value: string;
     disabled?: boolean;
     errorText?: string;
     isTextarea?: boolean;
+    className?: string;
 };
 
 const Input: FC<InputProps> = ({
