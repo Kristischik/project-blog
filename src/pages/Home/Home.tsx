@@ -8,6 +8,7 @@ import styles from "./Home.module.scss";
 import {useThemeContext} from "src/context/Theme";
 import classNames from "classnames";
 import SelectedPostModal from "src/pages/Home/SelectedPostModal";
+import SelectedImageModal from "src/pages/Home/SelectedImageModal";
 
 const MOCK_ARRAY = [
     {
@@ -199,6 +200,7 @@ const Home = () => {
             />
             <CardsList cardsList={cardsList} />
             <SelectedPostModal />
+            <SelectedImageModal />
         </div>
     );
 };

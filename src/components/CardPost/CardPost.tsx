@@ -22,6 +22,7 @@ type CardPostProps = {
     title?: string;
     author?: number;
     onMoreClick?: () => void;
+    onImageClick?: () => void;
 };
 
 const Card: FC<CardPostProps> = ({
@@ -31,6 +32,7 @@ const Card: FC<CardPostProps> = ({
                                      text,
                                      image,
                                      onMoreClick,
+                                     onImageClick
 
                              }) => {
     const cardStyle = styles[type];
@@ -50,7 +52,7 @@ const Card: FC<CardPostProps> = ({
                         )}
                     </div>
                     <div className={styles['content-img']}>
-                        <img src={image} alt="#" />
+                        <img onClick={onImageClick} src={image} alt="#" />
                     </div>
                 </div>
                 <div className={styles['icons']}>
