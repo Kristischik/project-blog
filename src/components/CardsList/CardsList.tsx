@@ -1,11 +1,12 @@
 import React, { FC } from "react";
 import { useDispatch } from "react-redux";
 
-import { Post, PostsList } from "src/@types";
+import {LikeStatus, Post, PostsList} from "src/@types";
 
 import  Card, { CardPostTypes} from "../CardPost";
 import styles from "./CardsList.module.scss";
 import {
+    setLikeStatus,
     setSelectedPost,
     setSelectedPostModalOpened,
 } from "src/redux/reducers/postSlice";
@@ -32,6 +33,11 @@ const CardsList: FC<CardsListProps> = ({ cardsList }) => {
 
     }
 
+    const onStatusClick = (card: Post) => (status: LikeStatus)  => {
+        dispatch(setLikeStatus({card, status}))
+
+    }
+
     return cardsList.length ? (
         <div className={styles.cardListContainer}>
             <div className={styles.cardListWrap}>
@@ -40,6 +46,7 @@ const CardsList: FC<CardsListProps> = ({ cardsList }) => {
                     {...cardsList[0]}
                     onMoreClick={onMoreClick(cardsList[0])}
                     onImageClick={onImageClick(cardsList[0].image)}
+                    onStatusClick = {onStatusClick(cardsList[0])}
                 />
                 <div className={styles.mediumContainer}>
                     {cardsList.map((el, idx) => {
@@ -50,7 +57,8 @@ const CardsList: FC<CardsListProps> = ({ cardsList }) => {
                                     type={CardPostTypes.Medium}
                                     {...el}
                                     onMoreClick={onMoreClick(el)}
-                                    onImageClick={onImageClick(cardsList[0].image)}
+                                    onImageClick={onImageClick(el.image)}
+                                    onStatusClick = {onStatusClick(el)}
                                 />
                             );
                         }
@@ -66,7 +74,8 @@ const CardsList: FC<CardsListProps> = ({ cardsList }) => {
                                 type={CardPostTypes.Small}
                                 {...el}
                                 onMoreClick={onMoreClick(el)}
-                                onImageClick={onImageClick(cardsList[0].image)}
+                                onImageClick={onImageClick(el.image)}
+                                onStatusClick = {onStatusClick(el)}
                             />
                         );
                     }
