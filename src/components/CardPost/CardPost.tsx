@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import classNames from "classnames";
 import styles from "./CardPost.module.scss";
 import {
-  BookmarkIcon,
+  BookmarkIcon, BookmarkIconSaved,
   DislikeIcon,
   LikeIcon,
   MoreIcon,
@@ -30,6 +30,7 @@ type CardPostProps = {
   onMoreClick?: () => void;
   onImageClick?: () => void;
   onStatusClick: (status: LikeStatus) => void;
+  onSaveClick?: () => void;
 };
 
 const Card: FC<CardPostProps> = ({
@@ -41,6 +42,7 @@ const Card: FC<CardPostProps> = ({
   onMoreClick,
   onImageClick,
   onStatusClick,
+  onSaveClick,
   id,
 }) => {
   const cardStyle = styles[type];
@@ -49,6 +51,8 @@ const Card: FC<CardPostProps> = ({
   const dislikedPosts = useSelector(PostSelectors.getDislikedPosts);
   const likedIndex = likedPosts.findIndex((item) => item.id === id);
   const dislikedIndex = dislikedPosts.findIndex((item) => item.id === id);
+  const savedPosts = useSelector(PostSelectors.getSavedPosts);
+  const savedIndex = savedPosts.findIndex((item) => item.id === id);
 
   return (
     <div>
@@ -78,10 +82,10 @@ const Card: FC<CardPostProps> = ({
             })}
           >
             <div onClick={() => onStatusClick(LikeStatus.Like)}>
-                <LikeIcon /> {likedIndex > -1 && <span>1</span>}
+              <LikeIcon /> {likedIndex > -1 && <span className={styles["count-likes"]}>1</span>}
             </div>
             <div onClick={() => onStatusClick(LikeStatus.Dislike)}>
-              <DislikeIcon /> {dislikedIndex > -1 && 1}
+              <DislikeIcon /> {dislikedIndex > -1 && <span className={styles["count-likes"]}>1</span>}
             </div>
           </div>
           <div
@@ -89,7 +93,9 @@ const Card: FC<CardPostProps> = ({
               [styles.darkIconsBook]: themeValue === Theme.Dark,
             })}
           >
-            <BookmarkIcon />
+            <div onClick={onSaveClick}>
+              {savedIndex > -1 ? <BookmarkIconSaved /> : <BookmarkIcon/>}
+            </div>
             {onMoreClick && (
               <div onClick={onMoreClick}>
                 <MoreIcon />

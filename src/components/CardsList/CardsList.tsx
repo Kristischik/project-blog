@@ -6,7 +6,7 @@ import {LikeStatus, Post, PostsList} from "src/@types";
 import  Card, { CardPostTypes} from "../CardPost";
 import styles from "./CardsList.module.scss";
 import {
-    setLikeStatus,
+    setLikeStatus, setSaveStatus,
     setSelectedPost,
     setSelectedPostModalOpened,
 } from "src/redux/reducers/postSlice";
@@ -38,6 +38,10 @@ const CardsList: FC<CardsListProps> = ({ cardsList }) => {
 
     }
 
+    const onSaveClick = (card: Post) => ()  => {
+        dispatch(setSaveStatus({card}))
+    }
+
     return cardsList.length ? (
         <div className={styles.cardListContainer}>
             <div className={styles.cardListWrap}>
@@ -47,6 +51,7 @@ const CardsList: FC<CardsListProps> = ({ cardsList }) => {
                     onMoreClick={onMoreClick(cardsList[0])}
                     onImageClick={onImageClick(cardsList[0].image)}
                     onStatusClick = {onStatusClick(cardsList[0])}
+                    onSaveClick = {onSaveClick(cardsList[0])}
                 />
                 <div className={styles.mediumContainer}>
                     {cardsList.map((el, idx) => {
@@ -59,8 +64,11 @@ const CardsList: FC<CardsListProps> = ({ cardsList }) => {
                                     onMoreClick={onMoreClick(el)}
                                     onImageClick={onImageClick(el.image)}
                                     onStatusClick = {onStatusClick(el)}
-                                />
+                                    onSaveClick = {onSaveClick(el)}
+                            />
                             );
+                        } else {
+                            return null
                         }
                     })}
                 </div>
@@ -76,8 +84,11 @@ const CardsList: FC<CardsListProps> = ({ cardsList }) => {
                                 onMoreClick={onMoreClick(el)}
                                 onImageClick={onImageClick(el.image)}
                                 onStatusClick = {onStatusClick(el)}
+                                onSaveClick = {onSaveClick(el)}
                             />
                         );
+                    } else {
+                        return null
                     }
                 })}
             </div>
