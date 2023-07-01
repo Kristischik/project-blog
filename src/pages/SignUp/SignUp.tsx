@@ -3,6 +3,8 @@ import FormPagesContainer from "src/components/FormPagesContainer";
 import Input from "src/components/Input";
 import styles from "./SignUp.module.scss";
 import {useThemeContext} from "src/context/Theme";
+import { useDispatch } from "react-redux";
+import { signUpUser } from "src/redux/reducers/authSlice";
 import { Theme } from "src/@types";
 import classNames from "classnames";
 
@@ -13,13 +15,24 @@ const SignUp = () => {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
+    const dispatch = useDispatch();
+
     const { themeValue } = useThemeContext();
+
+    const onSubmit = () => {
+        const data = {
+            username: name,
+            email,
+            password,
+        };
+        dispatch(signUpUser({ data, callback: () => {} }));
+    };
 
     return (
         <FormPagesContainer
             title={"Sign Up"}
             btnTitle={"Sign Up"}
-            onSubmit={() => {}}
+            onSubmit={onSubmit}
             additionalInfo={
                 <div  className={classNames(styles.additionalInfo, {
                     [styles.darkAdditionalInfo]: themeValue === Theme.Dark,
