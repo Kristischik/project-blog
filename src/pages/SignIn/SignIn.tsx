@@ -5,6 +5,10 @@ import styles from "./SignIn.module.scss";
 import {useThemeContext} from "src/context/Theme";
 import classNames from "classnames";
 import {Theme} from "src/@types";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import {signInUser} from "src/redux/reducers/authSlice";
+import {RoutesList} from "src/pages/Router";
 
 const SignIn = () => {
     const [email, setEmail] = useState("");
@@ -12,11 +16,18 @@ const SignIn = () => {
 
     const { themeValue } = useThemeContext();
 
+    const dispatch = useDispatch ()
+    const navigate = useNavigate ()
+
+    const onSubmit = () => {
+        dispatch(signInUser({data: {email, password}, callback: () => navigate(RoutesList.Home)}))
+    }
+
     return (
         <FormPagesContainer
             title={"Sign In"}
             btnTitle={"Sign In"}
-            onSubmit={() => {}}
+            onSubmit={onSubmit}
             additionalInfo={
                 <div className={styles.additionalInfo}>
                     {"Don’t have an account?"}

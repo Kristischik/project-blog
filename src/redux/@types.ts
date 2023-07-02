@@ -31,3 +31,15 @@ export type ActivateUserData = {
 export type SignUpUserPayload = PayloadWithDataAndCallback<SignUpUserData>;
 export type ActivateUserPayload = PayloadWithDataAndCallback<ActivateUserData>;
 
+export type SignInData = {
+  email: string,
+  password: string,
+}
+
+export type SignInUserPayload = PayloadWithDataAndCallback<SignInData>
+
+export type SignInUserResponseData = {
+  access: string,
+  refresh: string,
+}
+

@@ -11,10 +11,13 @@ import SelectedPostModal from "src/pages/Home/SelectedPostModal";
 import SelectedImageModal from "src/pages/Home/SelectedImageModal";
 import {getPostsList, PostSelectors} from "src/redux/reducers/postSlice";
 import { useDispatch, useSelector } from "react-redux";
+import {AuthSelectors} from "src/redux/reducers/authSlice";
 
 const Home = () => {
     const [activeTab, setActiveTab] = useState(TabsTypes.All);
-    const [isLoggedIn, setLoggedIn] = useState(false);
+    // const [isLoggedIn, setLoggedIn] = useState(false);
+    const isLoggedIn = useSelector(AuthSelectors.getLoggedIn)
+
     // const [cardsList, setCardsList] = useState<PostsList>([]);
 
     const dispatch = useDispatch();
@@ -39,9 +42,9 @@ const Home = () => {
 
     const onTabClick = (tab: TabsTypes) => () => {
         setActiveTab(tab);
-        if (tab === TabsTypes.Popular) {
-            setLoggedIn(true);
-        }
+        // if (tab === TabsTypes.Popular) {
+        //     setLoggedIn(true);
+        // }
     };
 
     const { themeValue } = useThemeContext();

@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 
 import Button, { ButtonTypes } from "src/components/Button";
-import {CloseIcon, MenuIcon, SearchIcon} from "src/assets/icons";
+import {CloseIcon, MenuIcon, SearchIcon, UserIcon} from "src/assets/icons";
 
 import styles from "./Header.module.scss";
 import ThemeSwitcher from "src/components/ThemeSwitcher";
@@ -12,11 +12,14 @@ import { useThemeContext } from "src/context/Theme";
 import classNames from "classnames";
 import { Theme } from "src/@types";
 import Input from "src/components/Input";
+import {useSelector} from "react-redux";
+import {AuthSelectors} from "src/redux/reducers/authSlice";
 
 const Header = () => {
     const { themeValue } = useThemeContext();
 
-    const isLoggedIn = true;
+    // const isLoggedIn = true;
+    const isLoggedIn = useSelector(AuthSelectors.getLoggedIn)
 
     const [isOpened, setOpened] = useState(false);
     const [isSearch, setSearch] = useState(false);
@@ -83,14 +86,19 @@ const Header = () => {
                     onClick={handleSearchOpened}
                     className={styles.searchButton}
                 />
-                {isLoggedIn && <Username username={"Kristina"} />}
+                {isLoggedIn ? <Username username={'Kristina'} /> : <Button
+                  type={ButtonTypes.Primary}
+                  title={<UserIcon />}
+                  onClick={onLoginButtonClick}
+                  className={styles.userButton}
+                />}
             </div>
         </div>
 
             <div className={styles.infoContainer}>
                 <Outlet />
                 <div className={styles.footer}>
-                    <div>©2022 Blogfolio</div>
+                    <div>©2022 Blogofolio</div>
                     <div>All rights reserved</div>
                 </div>
             </div>
