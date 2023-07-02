@@ -5,12 +5,14 @@ import Home from "src/pages/Home";
 import SignUp from "src/pages/SignUp";
 import RegistrationConfirmation from "src/pages/RegistrationConfirmation";
 import Header from "src/components/Header";
+import SelectedPost from "src/pages/SelectedPost";
 
 export enum RoutesList {
     Home = "/",
     SignUp = "/sign-up",
     SignIn = "/sign-in",
-    RegistrationConfirmation = "/sign-up/confirm",
+    RegistrationConfirmation = "/activate/:uid/:token",
+    SelectedPost = '/post/:id',
     Default = "*",
 }
 
@@ -22,6 +24,7 @@ const Router = () => {
                     <Route path={RoutesList.Home} element={<Home />} />
                     <Route path={RoutesList.SignUp} element={<SignUp />} />
                     <Route path={RoutesList.SignIn} element={<SignUp />} />
+                    <Route path={RoutesList.SelectedPost} element={<SelectedPost />} />
                     <Route
                         path={RoutesList.RegistrationConfirmation}
                         element={<RegistrationConfirmation />}

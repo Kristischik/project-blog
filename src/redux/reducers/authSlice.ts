@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { SignUpUserPayload } from "src/redux/@types";
+import {ActivateUserPayload, SignUpUserPayload} from "src/redux/@types";
 
 type InitialState = {};
 
@@ -10,10 +10,11 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     signUpUser: (_, __: PayloadAction<SignUpUserPayload>) => {},
+    activateUser: (_, __: PayloadAction<ActivateUserPayload>) => {},
   },
 });
 
-export const { signUpUser } = authSlice.actions;
+export const { signUpUser, activateUser } = authSlice.actions;
 
 export const AuthSelectors = {};
 

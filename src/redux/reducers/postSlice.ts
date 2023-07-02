@@ -1,15 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { RootState } from "src/redux/store";
-import {LikeStatus, Post, PostsList} from "src/@types";
+import { LikeStatus, Post, PostsList } from "src/@types";
 
 type InitialState = {
   isSelectedPostModalOpened: boolean;
   selectedPost: Post | null;
   likedPosts: PostsList;
   dislikedPosts: PostsList;
-  savedPosts : PostsList;
+  savedPosts: PostsList;
   postsList: PostsList;
+  singlePost: Post | null;
 };
 
 const initialState: InitialState = {
@@ -17,8 +18,9 @@ const initialState: InitialState = {
   selectedPost: null,
   likedPosts: [],
   dislikedPosts: [],
-  savedPosts : [],
+  savedPosts: [],
   postsList: [],
+  singlePost: null,
 };
 
 const postSlice = createSlice({
@@ -42,29 +44,28 @@ const postSlice = createSlice({
       const disLikedIndex = state.dislikedPosts.findIndex(
         (item) => item.id === card.id
       );
-      const isLike = status === LikeStatus.Like
-      const mainKey = isLike? 'likedPosts' : 'dislikedPosts'
-      const secondaryKey = isLike? 'dislikedPosts' : 'likedPosts'
-      const mainIndex = isLike? likedIndex : disLikedIndex
-      const secondaryIndex = isLike? disLikedIndex : likedIndex
-      if(mainIndex === -1) {
-        state[mainKey].push(card)
+      const isLike = status === LikeStatus.Like;
+      const mainKey = isLike ? "likedPosts" : "dislikedPosts";
+      const secondaryKey = isLike ? "dislikedPosts" : "likedPosts";
+      const mainIndex = isLike ? likedIndex : disLikedIndex;
+      const secondaryIndex = isLike ? disLikedIndex : likedIndex;
+      if (mainIndex === -1) {
+        state[mainKey].push(card);
       } else {
-        state[mainKey].splice(mainIndex, 1)
+        state[mainKey].splice(mainIndex, 1);
       }
-      if(secondaryIndex > -1) {
-        state[secondaryKey].splice(secondaryIndex, 1)
+      if (secondaryIndex > -1) {
+        state[secondaryKey].splice(secondaryIndex, 1);
       }
     },
-    setSaveStatus: (state, action: PayloadAction<{ card: Post}>) => {
+    setSaveStatus: (state, action: PayloadAction<{ card: Post }>) => {
       const { card } = action.payload;
       const savedIndex = state.savedPosts.findIndex(
         (item) => item.id === card.id
       );
       if (savedIndex === -1) {
-        state.savedPosts.push(card)
-      } else
-        state.savedPosts.splice(savedIndex, 1)
+        state.savedPosts.push(card);
+      } else state.savedPosts.splice(savedIndex, 1);
     },
 
     getPostsList: (_, __: PayloadAction<undefined>) => {},
@@ -72,11 +73,23 @@ const postSlice = createSlice({
       state.postsList = action.payload;
     },
 
+    getSinglePost: (_, __: PayloadAction<string>) => {},
+    setSinglePost: (state, action: PayloadAction<Post | null>) => {
+      state.singlePost = action.payload;
+    },
   }, // вот тут живут функции, которые ловят экшены по типу(т.е. по названию ф-и)
 });
 
-export const { setSelectedPostModalOpened, setSelectedPost, setLikeStatus , setSaveStatus, setPostsList, getPostsList} =
-  postSlice.actions;
+export const {
+  setSelectedPostModalOpened,
+  setSelectedPost,
+  setLikeStatus,
+  setSaveStatus,
+  setPostsList,
+  getPostsList,
+  getSinglePost,
+  setSinglePost,
+} = postSlice.actions;
 // а вот тут живут сами экшены, которые рождаются библиотекой исходя
 // из названия ф-ии, которая их ловит
 
@@ -88,7 +101,7 @@ export const PostSelectors = {
   getDislikedPosts: (state: RootState) => state.postReducer.dislikedPosts,
   getSavedPosts: (state: RootState) => state.postReducer.savedPosts,
   getPostsList: (state: RootState) => state.postReducer.postsList,
-
+  getSinglePost: (state: RootState) => state.postReducer.singlePost,
 };
 // вот отсюда мы достаем данные, которые заранее видоизменили снежками (экшенами)
 

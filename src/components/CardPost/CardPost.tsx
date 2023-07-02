@@ -8,9 +8,10 @@ import {
   MoreIcon,
 } from "src/assets/icons";
 import { useThemeContext } from "src/context/Theme";
-import { LikeStatus, Theme } from "src/@types";
+import {LikeStatus, Post, Theme} from "src/@types";
 import { useSelector } from "react-redux";
 import { PostSelectors } from "src/redux/reducers/postSlice";
+import { useNavigate } from "react-router-dom";
 
 export enum CardPostTypes {
   Large = "large",
@@ -18,20 +19,13 @@ export enum CardPostTypes {
   Small = "small",
 }
 
-type CardPostProps = {
+interface CardPostProps extends Post {
   type: CardPostTypes;
-  id?: number;
-  image?: string;
-  text?: string;
-  date?: string;
-  lesson_num?: number;
-  title?: string;
-  author?: number;
   onMoreClick?: () => void;
   onImageClick?: () => void;
   onStatusClick: (status: LikeStatus) => void;
   onSaveClick?: () => void;
-};
+}
 
 const Card: FC<CardPostProps> = ({
   type,
@@ -54,6 +48,13 @@ const Card: FC<CardPostProps> = ({
   const savedPosts = useSelector(PostSelectors.getSavedPosts);
   const savedIndex = savedPosts.findIndex((item) => item.id === id);
 
+  const navigate = useNavigate();
+
+  const onTitleClick = () => {
+    navigate(`/post/${id}`);
+  };
+
+
   return (
     <div>
       <div className={classNames(cardStyle)}>
@@ -64,6 +65,7 @@ const Card: FC<CardPostProps> = ({
               className={classNames(styles["content-text-title"], {
                 [styles.darkTitle]: themeValue === Theme.Dark,
               })}
+              onClick={onTitleClick}
             >
               {title}
             </h2>

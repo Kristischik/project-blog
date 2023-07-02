@@ -1,13 +1,13 @@
 import {ReactElement} from "react";
 
-export type Post = {
-    id?: number;
+export interface Post {
+    id: number;
     image: string;
-    text?: string;
+    text: string;
     date: string;
-    lesson_num?: number;
+    lesson_num: number;
     title: string;
-    author?: number;
+    author: number;
 }
 
 export type PostsList = Post[];
