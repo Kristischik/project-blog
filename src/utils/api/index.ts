@@ -27,10 +27,23 @@ const createToken = (data: SignInData) => {
   return API.post('/auth/jwt/create/', data);
 }
 
+const getUserInfo = (token: string) => {
+  return API.get(
+    "/auth/users/me/",
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};
+
 export default {
   signUpUser,
   getPosts,
   activateUser,
   getSinglePost,
   createToken,
+  getUserInfo,
 };

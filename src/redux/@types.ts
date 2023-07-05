@@ -43,3 +43,9 @@ export type SignInUserResponseData = {
   refresh: string,
 }
 
+export type UserInfoPayload = {
+  username: string,
+  id: number,
+  email: string,
+}
+

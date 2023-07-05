@@ -47,6 +47,8 @@ const Header = () => {
         navigate(RoutesList.SignIn);
     };
 
+    const userInfo = useSelector(AuthSelectors.getUserInfo);
+
     return (
         <div
             className={classNames(styles.container, {
@@ -86,7 +88,7 @@ const Header = () => {
                     onClick={handleSearchOpened}
                     className={styles.searchButton}
                 />
-                {isLoggedIn ? <Username username={'Kristina'} /> : <Button
+                {isLoggedIn && userInfo ? <Username username = {userInfo.username} /> : <Button
                   type={ButtonTypes.Primary}
                   title={<UserIcon />}
                   onClick={onLoginButtonClick}
@@ -105,7 +107,7 @@ const Header = () => {
             {isOpened && (
                 <div className={styles.menuContainer}>
                     <div>
-                        {isLoggedIn && <Username username={"Kristina"} />}
+                        {isLoggedIn && userInfo && < Username username={userInfo?.username} />}
                         {navLinks.map((link) => (
                             <NavLink
                                 to={link.path}

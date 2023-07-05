@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
 import Home from "src/pages/Home";
@@ -6,8 +6,8 @@ import SignUp from "src/pages/SignUp";
 import RegistrationConfirmation from "src/pages/RegistrationConfirmation";
 import Header from "src/components/Header";
 import SelectedPost from "src/pages/SelectedPost";
-import {useSelector} from "react-redux";
-import {AuthSelectors} from "src/redux/reducers/authSlice";
+import {useDispatch, useSelector} from "react-redux";
+import {AuthSelectors, getUserInfo} from "src/redux/reducers/authSlice";
 import SignIn from "src/pages/SignIn";
 import Success from "src/pages/Success";
 
@@ -22,8 +22,14 @@ export enum RoutesList {
 }
 
 const Router = () => {
-
+    const dispatch = useDispatch();
     const isLoggedIn = useSelector(AuthSelectors.getLoggedIn)
+
+    useEffect(() => {
+      if (isLoggedIn) {
+        dispatch(getUserInfo());
+      }
+    }, [isLoggedIn])
 
     return (
         <BrowserRouter>

@@ -2,13 +2,20 @@ import { all, takeLatest, call, put } from "redux-saga/effects";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { ApiResponse } from "apisauce";
 
-import {activateUser, setAccessToken, signInUser, signUpUser} from "src/redux/reducers/authSlice";
+import {
+  activateUser,
+  getUserInfo,
+  setAccessToken,
+  setUserInfo,
+  signInUser,
+  signUpUser
+} from "src/redux/reducers/authSlice";
 import {
   ActivateUserPayload,
   SignInUserPayload,
   SignInUserResponseData,
   SignUpResponseData,
-  SignUpUserPayload
+  SignUpUserPayload, UserInfoPayload
 } from "src/redux/@types";
 import API from "src/utils/api";
 import {ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY} from "src/utils/api/constants";
@@ -51,10 +58,27 @@ function* signInUserWorker(action: PayloadAction<SignInUserPayload>) {
   }
 }
 
+function* userInfoWorker() {
+  const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY);
+
+  if (accessToken) {
+    const response: ApiResponse<UserInfoPayload> = yield call(
+      API.getUserInfo,
+      accessToken
+    );
+    if (response.ok && response.data) {
+      yield put(setUserInfo(response.data));
+    } else {
+      console.error("Get User Info error", response.problem);
+    }
+  }
+}
+
 export default function* authSagaWatcher() {
   yield all([
     takeLatest(signUpUser, sighUpUserWorker),
     takeLatest(activateUser, activateUserWorker),
     takeLatest(signInUser, signInUserWorker),
+    takeLatest(getUserInfo, userInfoWorker),
   ]);
 }
