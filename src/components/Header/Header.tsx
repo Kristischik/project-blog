@@ -12,12 +12,12 @@ import { useThemeContext } from "src/context/Theme";
 import classNames from "classnames";
 import { Theme } from "src/@types";
 import Input from "src/components/Input";
-import {useSelector} from "react-redux";
-import {AuthSelectors} from "src/redux/reducers/authSlice";
+import {useDispatch, useSelector} from "react-redux";
+import {AuthSelectors, logoutUser} from "src/redux/reducers/authSlice";
 
 const Header = () => {
     const { themeValue } = useThemeContext();
-
+    const dispatch = useDispatch()
     // const isLoggedIn = true;
     const isLoggedIn = useSelector(AuthSelectors.getLoggedIn)
 
@@ -48,6 +48,10 @@ const Header = () => {
     };
 
     const userInfo = useSelector(AuthSelectors.getUserInfo);
+
+    const onLogout = () => {
+        dispatch(logoutUser());
+    };
 
     return (
         <div
@@ -123,7 +127,7 @@ const Header = () => {
                         <Button
                             type={ButtonTypes.Secondary}
                             title={isLoggedIn ? "Log Out" : "Sign In"}
-                            onClick={onLoginButtonClick}
+                            onClick={isLoggedIn ? onLogout : onLoginButtonClick}
                             className={styles.authButton}
                         />
                     </div>

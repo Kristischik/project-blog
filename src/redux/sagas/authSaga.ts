@@ -4,7 +4,7 @@ import { ApiResponse } from "apisauce";
 
 import {
   activateUser,
-  getUserInfo,
+  getUserInfo, logoutUser,
   setAccessToken,
   setUserInfo,
   signInUser,
@@ -18,7 +18,8 @@ import {
   SignUpUserPayload, UserInfoPayload
 } from "src/redux/@types";
 import API from "src/utils/api";
-import {ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY} from "src/utils/api/constants";
+import {ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY} from "src/utils/constants";
+import callCheckingAuth from "src/redux/sagas/helpers/callCheckingAuth";
 
 function* sighUpUserWorker(action: PayloadAction<SignUpUserPayload>) {
   const { data, callback } = action.payload;
@@ -58,27 +59,29 @@ function* signInUserWorker(action: PayloadAction<SignInUserPayload>) {
   }
 }
 
-function* userInfoWorker() {
-  const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY);
-
-  if (accessToken) {
-    const response: ApiResponse<UserInfoPayload> = yield call(
-      API.getUserInfo,
-      accessToken
-    );
-    if (response.ok && response.data) {
-      yield put(setUserInfo(response.data));
-    } else {
-      console.error("Get User Info error", response.problem);
-    }
+function* getUserInfoWorker() {
+  const response: ApiResponse<UserInfoPayload> | undefined =
+    yield callCheckingAuth(API.getUserInfo);
+  if (response && response?.ok && response?.data) {
+    yield put(setUserInfo(response.data));
+  } else {
+    console.error("Get User Info error", response?.problem);
   }
 }
+
+function* logoutWorker() {
+  localStorage.removeItem(ACCESS_TOKEN_KEY);
+  localStorage.removeItem(REFRESH_TOKEN_KEY);
+  yield put(setAccessToken(""));
+}
+
 
 export default function* authSagaWatcher() {
   yield all([
     takeLatest(signUpUser, sighUpUserWorker),
     takeLatest(activateUser, activateUserWorker),
     takeLatest(signInUser, signInUserWorker),
-    takeLatest(getUserInfo, userInfoWorker),
+    takeLatest(getUserInfo, getUserInfoWorker),
+    takeLatest(logoutUser, logoutWorker),
   ]);
 }

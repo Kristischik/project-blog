@@ -2,12 +2,18 @@ import { all, takeLatest, call, put } from "redux-saga/effects";
 import { ApiResponse } from "apisauce";
 import {PostListResponseData} from "src/redux/@types";
 import API from "src/utils/api";
-import {getPostsList, getSinglePost, setPostsList, setSinglePost} from "src/redux/reducers/postSlice";
+import {
+  getPostsList,
+  getSinglePost,
+  setPostsList,
+  setSinglePost,
+  setSinglePostLoading
+} from "src/redux/reducers/postSlice";
 import {PayloadAction} from "@reduxjs/toolkit";
 import {Post} from "src/@types";
 
 function* postWorker() {
-
+  yield put(setSinglePostLoading(true));
   const response: ApiResponse<PostListResponseData> = yield call(
     API.getPosts,
   );
@@ -16,6 +22,7 @@ function* postWorker() {
   } else {
     console.error("Sigh Up User error", response.problem);
   }
+  yield put(setSinglePostLoading(false));
 }
 
 function* getSinglePostWorker(action: PayloadAction<string>) {

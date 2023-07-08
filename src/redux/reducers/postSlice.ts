@@ -11,6 +11,7 @@ type InitialState = {
   savedPosts: PostsList;
   postsList: PostsList;
   singlePost: Post | null;
+  singlePostLoading: boolean;
 };
 
 const initialState: InitialState = {
@@ -21,6 +22,7 @@ const initialState: InitialState = {
   savedPosts: [],
   postsList: [],
   singlePost: null,
+  singlePostLoading: false,
 };
 
 const postSlice = createSlice({
@@ -74,6 +76,9 @@ const postSlice = createSlice({
     },
 
     getSinglePost: (_, __: PayloadAction<string>) => {},
+    setSinglePostLoading: (state, action: PayloadAction<boolean>) => {
+      state.singlePostLoading = action.payload;
+    },
     setSinglePost: (state, action: PayloadAction<Post | null>) => {
       state.singlePost = action.payload;
     },
@@ -89,6 +94,7 @@ export const {
   getPostsList,
   getSinglePost,
   setSinglePost,
+  setSinglePostLoading
 } = postSlice.actions;
 // а вот тут живут сами экшены, которые рождаются библиотекой исходя
 // из названия ф-ии, которая их ловит
@@ -102,6 +108,9 @@ export const PostSelectors = {
   getSavedPosts: (state: RootState) => state.postReducer.savedPosts,
   getPostsList: (state: RootState) => state.postReducer.postsList,
   getSinglePost: (state: RootState) => state.postReducer.singlePost,
+  getSinglePostLoading: (state: RootState) =>
+    state.postReducer.singlePostLoading,
+
 };
 // вот отсюда мы достаем данные, которые заранее видоизменили снежками (экшенами)
 

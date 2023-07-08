@@ -11,6 +11,7 @@ import classNames from "classnames";
 import {Theme} from "src/@types";
 import {getSinglePost, PostSelectors} from "src/redux/reducers/postSlice";
 import {RoutesList} from "src/pages/Router";
+import Loader from "src/components/Loader";
 
 // type CardPostProps =
 // {
@@ -25,9 +26,10 @@ const SelectedPost = () => {
 
     const { id } = useParams();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const singlePost = useSelector(PostSelectors.getSinglePost);
-    const navigate = useNavigate();
+    const isSinglePostLoading = useSelector(PostSelectors.getSinglePostLoading);
 
     useEffect(() => {
         if (id) {
@@ -39,7 +41,7 @@ const SelectedPost = () => {
         navigate(RoutesList.Home);
     };
 
-    return singlePost ? (
+    return singlePost && !isSinglePostLoading  ? (
 
         <div className={classNames(styles.container, {
             [styles.darkContainer]: themeValue === Theme.Dark,
@@ -66,7 +68,7 @@ const SelectedPost = () => {
             </div>
         </div>
 
-    ) : null
+    ) : <Loader />
 };
 
 export default SelectedPost;

@@ -5,7 +5,7 @@ import {
   SignUpUserPayload,
   UserInfoPayload,
 } from "src/redux/@types";
-import { ACCESS_TOKEN_KEY } from "src/utils/api/constants";
+import { ACCESS_TOKEN_KEY } from "src/utils/constants";
 import { RootState } from "src/redux/store";
 
 type InitialState = {
@@ -34,6 +34,7 @@ const authSlice = createSlice({
     setUserInfo: (state, action: PayloadAction<UserInfoPayload | null>) => {
       state.userInfo = action.payload;
     },
+    logoutUser: (_, __: PayloadAction<undefined>) => {},
   },
 });
 
@@ -44,6 +45,7 @@ export const {
   setAccessToken,
   getUserInfo,
   setUserInfo,
+  logoutUser,
 } = authSlice.actions;
 
 export const AuthSelectors = {

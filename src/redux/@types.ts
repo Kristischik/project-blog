@@ -43,6 +43,10 @@ export type SignInUserResponseData = {
   refresh: string,
 }
 
+export type RefreshResponseData = {
+  access: string;
+};
+
 export type UserInfoPayload = {
   username: string,
   id: number,
