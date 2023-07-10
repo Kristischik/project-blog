@@ -9,7 +9,7 @@ import {useThemeContext} from "src/context/Theme";
 import classNames from "classnames";
 import SelectedPostModal from "src/pages/Home/SelectedPostModal";
 import SelectedImageModal from "src/pages/Home/SelectedImageModal";
-import {getPostsList, PostSelectors} from "src/redux/reducers/postSlice";
+import {getMyPosts, getPostsList, PostSelectors} from "src/redux/reducers/postSlice";
 import { useDispatch, useSelector } from "react-redux";
 import {AuthSelectors} from "src/redux/reducers/authSlice";
 
@@ -21,7 +21,7 @@ const Home = () => {
     // const [cardsList, setCardsList] = useState<PostsList>([]);
 
     const dispatch = useDispatch();
-    const cardsList = useSelector(PostSelectors.getPostsList)
+    // const cardsList = useSelector(PostSelectors.getPostsList)
 
     const tabsList = useMemo(
         () => [
@@ -42,9 +42,9 @@ const Home = () => {
 
     useEffect(()=> {
         if (activeTab === TabsTypes.MyPosts) {
-            // dispatch(getMyPosts)
+            dispatch(getMyPosts())
         } else {
-            // dispatch(getAllPosts)
+           dispatch(getPostsList())
         }
     }, [activeTab])
 
@@ -55,6 +55,17 @@ const Home = () => {
         //     setLoggedIn(true);
         // }
     };
+
+    const allPosts = useSelector(PostSelectors.getPostsList)
+    const myPosts = useSelector(PostSelectors.getMyPosts)
+
+    const tabsSwitcher = () => {
+        switch (activeTab) {
+            case TabsTypes.MyPosts:
+                return myPosts;
+            default: return allPosts;
+        }
+    }
 
     const { themeValue } = useThemeContext();
 
@@ -68,7 +79,8 @@ const Home = () => {
                 activeTab={activeTab}
                 onTabClick={onTabClick}
             />
-            <CardsList cardsList={cardsList} />
+            {/*<CardsList cardsList={cardsList} />*/}
+            <CardsList cardsList={tabsSwitcher()} />
             <SelectedPostModal />
             <SelectedImageModal />
         </div>
