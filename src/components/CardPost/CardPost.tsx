@@ -17,6 +17,7 @@ export enum CardPostTypes {
   Large = "large",
   Medium = "medium",
   Small = "small",
+  Search = "search",
 }
 
 interface CardPostProps extends Post {

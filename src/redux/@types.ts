@@ -53,5 +53,21 @@ export type UserInfoPayload = {
   email: string,
 }
 
+export type GetPostsPayload = {
+  offset: number;
+  isOverwrite: boolean;
+};
 
+export type SetPostsListPayload = {
+  total: number;
+  postsList: PostsList;
+  isOverwrite: boolean;
+};
+
+export type GetPostsResponseData = {
+  count: number;
+  next: string;
+  previous: string;
+  results: PostsList;
+};
 

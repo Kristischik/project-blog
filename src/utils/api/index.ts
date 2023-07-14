@@ -1,5 +1,6 @@
 import { create } from "apisauce";
 import {ActivateUserData, SignInData, SignUpUserData} from "src/redux/@types";
+import {PER_PAGE} from "src/utils/constants";
 
 const API = create({
   baseURL: "https://studapi.teachmeskills.by",
@@ -11,8 +12,8 @@ const signUpUser = (data: SignUpUserData) => {
 //   пишем после API. запрос и в скобках хвостик запроса и тело запроса с типом который мы создали в @types.ts
 };
 
-const getPosts = () => {
-  return API.get("/blog/posts/?limit=12");
+const getPosts = (offset: number, search?: string) => {
+  return API.get("/blog/posts/", { limit: PER_PAGE, offset, search });
 };
 
 const activateUser = (data: ActivateUserData) => {

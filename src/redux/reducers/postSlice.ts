@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { RootState } from "src/redux/store";
 import { LikeStatus, Post, PostsList } from "src/@types";
+import {GetPostsPayload, SetPostsListPayload} from "src/redux/@types";
 
 type InitialState = {
   isSelectedPostModalOpened: boolean;
@@ -13,6 +14,9 @@ type InitialState = {
   singlePost: Post | null;
   singlePostLoading: boolean;
   myPosts: PostsList,
+  searchedPosts: PostsList,
+  totalCount: number;
+  isPostsListLoading: boolean;
 };
 
 const initialState: InitialState = {
@@ -25,6 +29,9 @@ const initialState: InitialState = {
   singlePost: null,
   singlePostLoading: false,
   myPosts: [],
+  searchedPosts: [],
+  totalCount: 0,
+  isPostsListLoading: false,
 };
 
 const postSlice = createSlice({
@@ -72,10 +79,10 @@ const postSlice = createSlice({
       } else state.savedPosts.splice(savedIndex, 1);
     },
 
-    getPostsList: (_, __: PayloadAction<undefined>) => {},
-    setPostsList: (state, action: PayloadAction<PostsList>) => {
-      state.postsList = action.payload;
-    },
+    // getPostsList: (_, __: PayloadAction<undefined>) => {},
+    // setPostsList: (state, action: PayloadAction<PostsList>) => {
+    //   state.postsList = action.payload;
+    // },
 
     getSinglePost: (_, __: PayloadAction<string>) => {},
     setSinglePostLoading: (state, action: PayloadAction<boolean>) => {
@@ -89,6 +96,24 @@ const postSlice = createSlice({
     setMyPosts: (state, action: PayloadAction<PostsList>) => {
       state.myPosts = action.payload;
     },
+    getSearchedPosts: (_, __: PayloadAction<string>) => {},
+    setSearchedPosts: (state, action: PayloadAction<PostsList>) => {
+      state.searchedPosts = action.payload;
+    },
+
+    getPostsList: (_, __: PayloadAction<GetPostsPayload>) => {},
+    setPostsList: (state, action: PayloadAction<SetPostsListPayload>) => {
+      const { total, isOverwrite, postsList } = action.payload;
+      state.totalCount = total;
+      if (isOverwrite) {
+        state.postsList = postsList;
+      } else {
+        state.postsList.push(...postsList);
+      }
+    },
+    setPostsListLoading: (state, action: PayloadAction<boolean>) => {
+      state.isPostsListLoading = action.payload;
+    },
 
   }, // вот тут живут функции, которые ловят экшены по типу(т.е. по названию ф-и)
 });
@@ -98,13 +123,18 @@ export const {
   setSelectedPost,
   setLikeStatus,
   setSaveStatus,
-  setPostsList,
-  getPostsList,
+  // setPostsList,
+  // getPostsList,
   getSinglePost,
   setSinglePost,
   setSinglePostLoading,
   getMyPosts,
   setMyPosts,
+  getSearchedPosts,
+  setSearchedPosts,
+  getPostsList,
+  setPostsList,
+  setPostsListLoading,
 } = postSlice.actions;
 // а вот тут живут сами экшены, которые рождаются библиотекой исходя
 // из названия ф-ии, которая их ловит
@@ -116,11 +146,16 @@ export const PostSelectors = {
   getLikedPosts: (state: RootState) => state.postReducer.likedPosts,
   getDislikedPosts: (state: RootState) => state.postReducer.dislikedPosts,
   getSavedPosts: (state: RootState) => state.postReducer.savedPosts,
-  getPostsList: (state: RootState) => state.postReducer.postsList,
+  // getPostsList: (state: RootState) => state.postReducer.postsList,
   getSinglePost: (state: RootState) => state.postReducer.singlePost,
   getSinglePostLoading: (state: RootState) =>
     state.postReducer.singlePostLoading,
   getMyPosts: (state: RootState) => state.postReducer.myPosts,
+  getSearchedPosts: (state: RootState) => state.postReducer.searchedPosts,
+  getPostsListLoading: (state: RootState) =>
+    state.postReducer.isPostsListLoading,
+  getPostsList: (state: RootState) => state.postReducer.postsList,
+  getTotalPostsCount: (state: RootState) => state.postReducer.totalCount,
 
 };
 // вот отсюда мы достаем данные, которые заранее видоизменили снежками (экшенами)

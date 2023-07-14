@@ -1,4 +1,5 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, KeyboardEvent} from "react";
+
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 
 import Button, { ButtonTypes } from "src/components/Button";
@@ -41,6 +42,10 @@ const Header = () => {
 
     const handleSearchOpened = () => {
         setSearch(!isSearch);
+        if (isSearch && inputValue) {
+            navigate(`posts/${inputValue}`);
+            setInputValue("");
+        }
     };
 
     const onLoginButtonClick = () => {
@@ -52,6 +57,15 @@ const Header = () => {
     const onLogout = () => {
         dispatch(logoutUser());
     };
+
+    const onKeyDown = (
+      event: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
+        if (event.key === "Enter") {
+            handleSearchOpened();
+        }
+    };
+
 
     return (
         <div
@@ -74,6 +88,7 @@ const Header = () => {
                         onChange={setInputValue}
                         value={inputValue}
                         className={styles.searchInput}
+                        onKeyDown={onKeyDown}
                     />
                     <div>
                         <Button

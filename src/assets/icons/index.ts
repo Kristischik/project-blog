@@ -9,3 +9,4 @@ export { CloseIcon } from "./CloseIcon";
 export { SearchIcon } from "./SearchIcon";
 export { UserIcon } from "./UserIcon";
 export {BookmarkIconSaved} from "./BookmarkIconSaved";
+export { EmptyListIcon } from "./EmptyListIcon";
