@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { RootState } from "src/redux/store";
 import { LikeStatus, Post, PostsList } from "src/@types";
-import {GetPostsPayload, SetPostsListPayload} from "src/redux/@types";
+import {GetPostsPayload, GetSearchedPostsPayload, SetPostsListPayload, SetSearchedPostsPayload} from "src/redux/@types";
 
 type InitialState = {
   isSelectedPostModalOpened: boolean;
@@ -17,6 +17,7 @@ type InitialState = {
   searchedPosts: PostsList,
   totalCount: number;
   isPostsListLoading: boolean;
+  totalSearchedCount: number;
 };
 
 const initialState: InitialState = {
@@ -32,6 +33,7 @@ const initialState: InitialState = {
   searchedPosts: [],
   totalCount: 0,
   isPostsListLoading: false,
+  totalSearchedCount: 0,
 };
 
 const postSlice = createSlice({
@@ -96,9 +98,18 @@ const postSlice = createSlice({
     setMyPosts: (state, action: PayloadAction<PostsList>) => {
       state.myPosts = action.payload;
     },
-    getSearchedPosts: (_, __: PayloadAction<string>) => {},
-    setSearchedPosts: (state, action: PayloadAction<PostsList>) => {
-      state.searchedPosts = action.payload;
+
+      getSearchedPosts: (_, __: PayloadAction<GetSearchedPostsPayload>) => {},
+        setSearchedPosts: (
+        state,
+        action: PayloadAction<SetSearchedPostsPayload>
+      ) => {
+        const { total, postsList } = action.payload;
+        state.totalSearchedCount = total;
+        state.searchedPosts.push(...postsList);
+      },
+        clearSearchedPosts: (state) => {
+        state.searchedPosts = [];
     },
 
     getPostsList: (_, __: PayloadAction<GetPostsPayload>) => {},
@@ -135,6 +146,7 @@ export const {
   getPostsList,
   setPostsList,
   setPostsListLoading,
+  clearSearchedPosts,
 } = postSlice.actions;
 // а вот тут живут сами экшены, которые рождаются библиотекой исходя
 // из названия ф-ии, которая их ловит
@@ -156,6 +168,8 @@ export const PostSelectors = {
     state.postReducer.isPostsListLoading,
   getPostsList: (state: RootState) => state.postReducer.postsList,
   getTotalPostsCount: (state: RootState) => state.postReducer.totalCount,
+  getTotalSearchedPosts: (state: RootState) =>
+    state.postReducer.totalSearchedCount,
 
 };
 // вот отсюда мы достаем данные, которые заранее видоизменили снежками (экшенами)

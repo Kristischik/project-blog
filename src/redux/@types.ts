@@ -71,3 +71,9 @@ export type GetPostsResponseData = {
   results: PostsList;
 };
 
+export type GetSearchedPostsPayload = {
+  offset: number;
+  search: string;
+};
+export type SetSearchedPostsPayload = Omit<SetPostsListPayload, "isOverwrite">; // взяли тип и выбросили то, что не надо
+

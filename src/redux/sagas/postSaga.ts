@@ -1,6 +1,6 @@
 import { all, takeLatest, call, put } from "redux-saga/effects";
 import { ApiResponse } from "apisauce";
-import {GetPostsPayload, GetPostsResponseData, PostListResponseData} from "src/redux/@types";
+import {GetPostsPayload, GetPostsResponseData, GetSearchedPostsPayload, PostListResponseData} from "src/redux/@types";
 import API from "src/utils/api";
 import {
   getMyPosts,
@@ -54,14 +54,23 @@ function* getMyPostsWorker() {
   }
 }
 
-function* getSearchedPostsWorker(action: PayloadAction<string>) {
+function* getSearchedPostsWorker(
+  action: PayloadAction<GetSearchedPostsPayload>
+) {
+  const { offset, search } = action.payload;
   const response: ApiResponse<PostListResponseData> = yield call(
     API.getPosts,
-    0,
-    action.payload
+    offset,
+    search
   );
   if (response.ok && response.data) {
-    yield put(setSearchedPosts(response.data.results));
+    const { results, count } = response.data;
+    yield put(
+      setSearchedPosts({
+        postsList: results,
+        total: count,
+      })
+    );
   } else {
     console.error("Searched Posts error", response.problem);
   }

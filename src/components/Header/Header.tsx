@@ -15,6 +15,7 @@ import { Theme } from "src/@types";
 import Input from "src/components/Input";
 import {useDispatch, useSelector} from "react-redux";
 import {AuthSelectors, logoutUser} from "src/redux/reducers/authSlice";
+import {clearSearchedPosts} from "src/redux/reducers/postSlice";
 
 const Header = () => {
     const { themeValue } = useThemeContext();
@@ -43,6 +44,7 @@ const Header = () => {
     const handleSearchOpened = () => {
         setSearch(!isSearch);
         if (isSearch && inputValue) {
+            dispatch(clearSearchedPosts());
             navigate(`posts/${inputValue}`);
             setInputValue("");
         }
