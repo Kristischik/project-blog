@@ -7,3 +7,27 @@
 .darkContainer {
   background-color: $secondary;
 }
+
+.sortButtonContainer {
+
+  display: flex;
+  justify-content: start;
+  margin-bottom: 30px;
+  gap: 15px;
+
+  .sortButton {
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+    font-weight: 400;
+    font-size: 12px;
+    text-transform: uppercase;
+
+    &:hover {
+      background-color: $primary-secondary;
+      color: $white;
+      cursor: pointer;
+    }
+  }
+}
+

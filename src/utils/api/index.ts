@@ -12,8 +12,8 @@ const signUpUser = (data: SignUpUserData) => {
 //   пишем после API. запрос и в скобках хвостик запроса и тело запроса с типом который мы создали в @types.ts
 };
 
-const getPosts = (offset: number, search?: string) => {
-  return API.get("/blog/posts/", { limit: PER_PAGE, offset, search });
+const getPosts = (offset: number, search?: string, ordering?: string) => {
+  return API.get("/blog/posts/", { limit: PER_PAGE, offset, search, ordering });
 };
 
 const activateUser = (data: ActivateUserData) => {

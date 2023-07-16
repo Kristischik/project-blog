@@ -56,6 +56,7 @@ export type UserInfoPayload = {
 export type GetPostsPayload = {
   offset: number;
   isOverwrite: boolean;
+  ordering?: string;
 };
 
 export type SetPostsListPayload = {
@@ -76,4 +77,6 @@ export type GetSearchedPostsPayload = {
   search: string;
 };
 export type SetSearchedPostsPayload = Omit<SetPostsListPayload, "isOverwrite">; // взяли тип и выбросили то, что не надо
+
+
 
