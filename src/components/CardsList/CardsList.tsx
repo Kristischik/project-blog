@@ -7,6 +7,7 @@ import Card, { CardPostTypes } from "../CardPost";
 import styles from "./CardsList.module.scss";
 import Loader from "src/components/Loader";
 import {useCardActions} from "src/hooks";
+import EmptyState from "src/components/EmptyState";
 
 type CardsListProps = {
   cardsList: PostsList;
@@ -14,6 +15,7 @@ type CardsListProps = {
 };
 
 const CardsList: FC<CardsListProps> = ({ cardsList, isLoading }) => {
+
   const {
     onSaveClick,
     onImageClick,
@@ -21,7 +23,11 @@ const CardsList: FC<CardsListProps> = ({ cardsList, isLoading }) => {
     onMoreClick,
   } = useCardActions();
 
-  return cardsList.length && !isLoading ? (
+  if (isLoading) {
+    return  <Loader />
+  }
+
+  return cardsList.length ? (
     <div className={styles.cardListContainer}>
       <div className={styles.cardListWrap}>
         <Card
@@ -72,9 +78,7 @@ const CardsList: FC<CardsListProps> = ({ cardsList, isLoading }) => {
         })}
       </div>
     </div>
-  ) : (
-    <Loader />
-  );
+  ) : <EmptyState title="There is no posts" description="Create a new one!" />
 };
 
 export default CardsList;

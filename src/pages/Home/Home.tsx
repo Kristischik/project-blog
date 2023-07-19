@@ -1,20 +1,20 @@
-import { useEffect, useMemo, useState } from "react";
+import {useEffect, useMemo, useState} from "react";
 
 import Title from "../../components/Title";
 import CardsList from "../../components/CardsList";
-import { Ordering, TabsTypes, Theme } from "src/@types";
+import {Ordering, TabsTypes, Theme} from "src/@types";
 import TabsList from "../../components/TabsList";
 import styles from "./Home.module.scss";
-import { useThemeContext } from "src/context/Theme";
+import {useThemeContext} from "src/context/Theme";
 import classNames from "classnames";
 import SelectedPostModal from "src/pages/Home/SelectedPostModal";
 import SelectedImageModal from "src/pages/Home/SelectedImageModal";
-import { getPostsList, PostSelectors } from "src/redux/reducers/postSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { AuthSelectors } from "src/redux/reducers/authSlice";
-import { PER_PAGE } from "src/utils/constants";
+import {getMyPosts, getPostsList, PostSelectors,} from "src/redux/reducers/postSlice";
+import {useDispatch, useSelector} from "react-redux";
+import {AuthSelectors} from "src/redux/reducers/authSlice";
+import {PER_PAGE} from "src/utils/constants";
 import Pagination from "src/components/Pagination";
-import Button, { ButtonTypes } from "src/components/Button";
+import Button, {ButtonTypes} from "src/components/Button";
 
 const Home = () => {
   const [activeTab, setActiveTab] = useState(TabsTypes.All);
@@ -29,7 +29,7 @@ const Home = () => {
   const tabsList = useMemo(
     () => [
       { key: TabsTypes.All, title: "All Posts", disabled: false },
-      { key: TabsTypes.Popular, title: "Popular Posts", disabled: false },
+      { key: TabsTypes.Favourite, title: "Favourite Posts", disabled: false },
       {
         key: TabsTypes.MyPosts,
         title: "My Posts",
@@ -57,9 +57,13 @@ const Home = () => {
 
   useEffect(() => {
     // сколько надо пропустить постов (сколько мы уже посмотрели)
-    const offset = (currentPage - 1) * PER_PAGE;
-    dispatch(getPostsList({ offset, isOverwrite: true, ordering }));
-  }, [currentPage, dispatch, ordering]);
+    if (activeTab === TabsTypes.MyPosts) {
+      dispatch(getMyPosts());
+    } else {
+      const offset = (currentPage - 1) * PER_PAGE;
+      dispatch(getPostsList({ offset, isOverwrite: true, ordering }));
+    }
+  }, [currentPage, dispatch, ordering, activeTab]);
 
   const onPageChange = ({ selected }: { selected: number }) => {
     setCurrentPage(selected + 1);
@@ -69,13 +73,13 @@ const Home = () => {
   //     dispatch(getPostsList());
   // }, [])
 
-  // useEffect(()=> {
-  //     if (activeTab === TabsTypes.MyPosts) {
-  //         dispatch(getMyPosts())
-  //     } else {
-  //        dispatch(getPostsList())
-  //     }
-  // }, [activeTab])
+  // useEffect(() => {
+  //   if (activeTab === TabsTypes.MyPosts) {
+  //     dispatch(getMyPosts());
+  //   } else {
+  //     dispatch(getPostsList());
+  //   }
+  // }, [activeTab]);
 
   const onTabClick = (tab: TabsTypes) => () => {
     setActiveTab(tab);
@@ -93,16 +97,18 @@ const Home = () => {
     }
   };
 
-  // const allPosts = useSelector(PostSelectors.getPostsList)
-  // const myPosts = useSelector(PostSelectors.getMyPosts)
-
-  // const tabsSwitcher = () => {
-  //     switch (activeTab) {
-  //         case TabsTypes.MyPosts:
-  //             return myPosts;
-  //         default: return allPosts;
-  //     }
-  // }
+  const allPosts = useSelector(PostSelectors.getPostsList)
+  const myPosts = useSelector(PostSelectors.getMyPosts)
+  const favouritePosts = useSelector(PostSelectors.getSavedPosts)
+  const tabsSwitcher = () => {
+      switch (activeTab) {
+          case TabsTypes.MyPosts:
+              return myPosts;
+        case TabsTypes.Favourite:
+          return favouritePosts;
+          default: return allPosts;
+      }
+  }
 
   const { themeValue } = useThemeContext();
 
@@ -119,27 +125,35 @@ const Home = () => {
         onTabClick={onTabClick}
       />
 
-      <div className={styles.sortButtonContainer}>
-        <Button className={classNames(styles.sortButton, { [styles.activeButton]: ordering === Ordering.Date,})}
-          type={ButtonTypes.Primary}
-          title={"Sort for Date"}
-          onClick={SortButtonClick(Ordering.Date)}
-        />
-        <Button className={classNames(styles.sortButton, { [styles.activeButton]: ordering === Ordering.Title,})}
-          type={ButtonTypes.Primary}
-          title={"Sort for Title"}
-          onClick={SortButtonClick(Ordering.Title)}
-        />
-      </div>
+      {activeTab === TabsTypes.All &&
+        <div className={styles.sortButtonContainer}>
+          <Button
+            className={classNames(styles.sortButton, {
+              [styles.activeButton]: ordering === Ordering.Date,
+            })}
+            type={ButtonTypes.Primary}
+            title={"Sort for Date"}
+            onClick={SortButtonClick(Ordering.Date)}
+          />
+          <Button
+            className={classNames(styles.sortButton, {
+              [styles.activeButton]: ordering === Ordering.Title,
+            })}
+            type={ButtonTypes.Primary}
+            title={"Sort for Title"}
+            onClick={SortButtonClick(Ordering.Title)}
+          />
+        </div>
+      }
 
       {/*<CardsList cardsList={cardsList} />*/}
       {/*<CardsList cardsList={tabsSwitcher()} />*/}
-      <CardsList cardsList={cardsList} isLoading={isListLoading} />
-      <Pagination
+      <CardsList cardsList={tabsSwitcher()} isLoading={isListLoading} />
+      {activeTab === TabsTypes.All &&<Pagination
         currentPage={currentPage}
         pagesCount={pagesCount}
         onPageChange={onPageChange}
-      />
+      />}
       <SelectedPostModal />
       <SelectedImageModal />
     </div>

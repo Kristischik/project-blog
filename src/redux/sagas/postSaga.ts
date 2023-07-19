@@ -41,6 +41,7 @@ function* getSinglePostWorker(action: PayloadAction<string>) {
 }
 
 function* getMyPostsWorker() {
+  yield put(setPostsListLoading(true));
   const response: ApiResponse<PostListResponseData> = yield callCheckingAuth(
     API.getMyPosts
   );
@@ -52,6 +53,7 @@ function* getMyPostsWorker() {
   } else {
     console.error("Set My Posts error", response.problem);
   }
+  yield put(setPostsListLoading(false));
 }
 
 function* getSearchedPostsWorker(
