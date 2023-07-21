@@ -11,6 +11,7 @@ import {AuthSelectors, getUserInfo} from "src/redux/reducers/authSlice";
 import SignIn from "src/pages/SignIn";
 import Success from "src/pages/Success";
 import Search from "src/pages/Search";
+import AddPost from './AddPost/AddPost';
 
 export enum RoutesList {
     Home = "/",
@@ -20,6 +21,7 @@ export enum RoutesList {
     SelectedPost = '/post/:id',
     Success = "/sing-up/confirm/success",
     Search = "/posts/:search",
+    AddPost = '/blog/posts/',
     Default = "*",
 }
 
@@ -52,6 +54,8 @@ const Router = () => {
                     />
                     <Route path={RoutesList.Search}
                            element={<Search/>}/>
+                    <Route path={RoutesList.AddPost} element={isLoggedIn ? <AddPost /> : <Navigate to={RoutesList.Home} />} />
+
                 </Route>
             </Routes>
         </BrowserRouter>

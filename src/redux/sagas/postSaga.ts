@@ -1,8 +1,15 @@
 import { all, takeLatest, call, put } from "redux-saga/effects";
 import { ApiResponse } from "apisauce";
-import {GetPostsPayload, GetPostsResponseData, GetSearchedPostsPayload, PostListResponseData} from "src/redux/@types";
+import {
+  AddPostDataPayload,
+  GetPostsPayload,
+  GetPostsResponseData,
+  GetSearchedPostsPayload,
+  PostListResponseData
+} from "src/redux/@types";
 import API from "src/utils/api";
 import {
+  addNewPost,
   getMyPosts,
   getPostsList, getSearchedPosts,
   getSinglePost,
@@ -84,6 +91,7 @@ function* getPostsWorker(action: PayloadAction<GetPostsPayload>) {
   const response: ApiResponse<GetPostsResponseData> = yield call(
     API.getPosts,
     offset,
+    "",
     ordering
   );
   if (response.ok && response.data) {
@@ -101,6 +109,23 @@ function* getPostsWorker(action: PayloadAction<GetPostsPayload>) {
   yield put(setPostsListLoading(false));
 }
 
+function* addPostWorker(action: PayloadAction<AddPostDataPayload>) {
+
+  const { data, callback } = action.payload
+
+  const response: ApiResponse<undefined> = yield callCheckingAuth(
+    API.addPost,
+    data,
+  )
+  if (response.data && response.ok) {
+    callback();
+
+  } else {
+    console.error('Add Post Error', response.problem);
+
+  }
+}
+
 export default function* postSagaWatcher() {
   yield all([
     // takeLatest(getPostsList, postWorker),
@@ -108,5 +133,6 @@ export default function* postSagaWatcher() {
     takeLatest(getMyPosts, getMyPostsWorker),
     takeLatest(getSearchedPosts, getSearchedPostsWorker),
     takeLatest(getPostsList, getPostsWorker),
+    takeLatest(addNewPost, addPostWorker),
   ]);
 }

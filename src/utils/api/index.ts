@@ -59,8 +59,16 @@ const getMyPosts = (token: string) => {
     }
   );
 };
+const addPost = (token: string, data: any) => {
+  return API.post('/blog/posts/', data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    }
+  })
+}
 
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default {
   signUpUser,
   getPosts,
@@ -71,4 +79,5 @@ export default {
   verifyToken,
   refreshToken,
   getMyPosts,
+  addPost,
 };

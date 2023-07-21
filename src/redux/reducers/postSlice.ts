@@ -2,7 +2,13 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { RootState } from "src/redux/store";
 import { LikeStatus, Post, PostsList } from "src/@types";
-import {GetPostsPayload, GetSearchedPostsPayload, SetPostsListPayload, SetSearchedPostsPayload} from "src/redux/@types";
+import {
+  AddPostDataPayload,
+  GetPostsPayload,
+  GetSearchedPostsPayload,
+  SetPostsListPayload,
+  SetSearchedPostsPayload
+} from "src/redux/@types";
 
 type InitialState = {
   isSelectedPostModalOpened: boolean;
@@ -126,6 +132,8 @@ const postSlice = createSlice({
       state.isPostsListLoading = action.payload;
     },
 
+    addNewPost: (_, __: PayloadAction<AddPostDataPayload>) => { },
+
   }, // вот тут живут функции, которые ловят экшены по типу(т.е. по названию ф-и)
 });
 
@@ -147,6 +155,7 @@ export const {
   setPostsList,
   setPostsListLoading,
   clearSearchedPosts,
+  addNewPost,
 } = postSlice.actions;
 // а вот тут живут сами экшены, которые рождаются библиотекой исходя
 // из названия ф-ии, которая их ловит

@@ -1,0 +1,9 @@
+@import "src/styles/colors";
+
+.uploadImage {
+  padding: 20px;
+  border: 3px dashed $secondary;
+}
+.uploadDragging {
+  border-color: $primary;
+}

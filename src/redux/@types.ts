@@ -78,5 +78,5 @@ export type GetSearchedPostsPayload = {
 };
 export type SetSearchedPostsPayload = Omit<SetPostsListPayload, "isOverwrite">; // взяли тип и выбросили то, что не надо
 
-
+export type AddPostDataPayload = PayloadWithDataAndCallback<any>
 
