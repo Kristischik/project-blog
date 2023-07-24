@@ -8,10 +8,11 @@ import {
   setAccessToken,
   setUserInfo,
   signInUser,
-  signUpUser
+  signUpUser,
+  resetPassword, resetPasswordConfirm,
 } from "src/redux/reducers/authSlice";
 import {
-  ActivateUserPayload,
+  ActivateUserPayload, ResetPasswordConfirmationPayload, ResetPasswordPayload,
   SignInUserPayload,
   SignInUserResponseData,
   SignUpResponseData,
@@ -20,6 +21,7 @@ import {
 import API from "src/utils/api";
 import {ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY} from "src/utils/constants";
 import callCheckingAuth from "src/redux/sagas/helpers/callCheckingAuth";
+
 
 function* sighUpUserWorker(action: PayloadAction<SignUpUserPayload>) {
   const { data, callback } = action.payload;
@@ -75,6 +77,29 @@ function* logoutWorker() {
   yield put(setAccessToken(""));
 }
 
+function* resetPasswordWorker(action: PayloadAction<ResetPasswordPayload>) {
+  const { data, callback } = action.payload;
+  const response: ApiResponse<undefined> = yield call(
+    API.resetPassword,
+    data
+  );
+  if (response.ok) {
+    callback();
+  } else {
+    console.error("Reset Password error", response.problem);
+  }
+}
+
+function* resetPasswordConfirmationWorker(action: PayloadAction<ResetPasswordConfirmationPayload>) {
+  const { data, callback } = action.payload;
+  const response: ApiResponse<undefined> = yield call(API.resetPasswordConfirmation, data);
+  if (response.ok) {
+    callback();
+  } else {
+    console.error("Reset Password Confirmation error", response.problem);
+  }
+}
+
 
 export default function* authSagaWatcher() {
   yield all([
@@ -83,5 +108,7 @@ export default function* authSagaWatcher() {
     takeLatest(signInUser, signInUserWorker),
     takeLatest(getUserInfo, getUserInfoWorker),
     takeLatest(logoutUser, logoutWorker),
+    takeLatest(resetPassword, resetPasswordWorker),
+    takeLatest(resetPasswordConfirm, resetPasswordConfirmationWorker),
   ]);
 }

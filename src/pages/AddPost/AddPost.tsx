@@ -1,63 +1,119 @@
-import React, { useState } from 'react';
-import ImageUploading, { ImageListType } from 'react-images-uploading';
+import React, { useEffect, useState } from "react";
+import ImageUploading, { ImageListType } from "react-images-uploading";
 
-import {useDispatch} from "react-redux";
-import {useNavigate} from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 import Title from "src/components/Title";
 import Input from "src/components/Input";
-import Button, {ButtonTypes} from "src/components/Button";
-import {RoutesList} from "src/pages/Router";
+import Button, { ButtonTypes } from "src/components/Button";
+import { RoutesList } from "src/pages/Router";
 import classNames from "classnames";
 
-import styles from './AddPost.module.scss'
-import {addNewPost} from "src/redux/reducers/postSlice";
+import styles from "./AddPost.module.scss";
+import {
+  addNewPost, deletePost, editPost,
+  getSinglePost,
+  PostSelectors,
+} from "src/redux/reducers/postSlice";
+import { AuthSelectors } from "src/redux/reducers/authSlice";
 
 const AddPost = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const { id } = useParams();
+  const singlePost = useSelector(PostSelectors.getSinglePost);
+  const userInfo = useSelector(AuthSelectors.getUserInfo);
 
-
-  const [title, setTitle] = useState('')
-  const [lessonNumber, setLessonNumber] = useState('')
-  const [description, setDescription] = useState('')
-  const [text, setText] = useState('')
+  const [title, setTitle] = useState("");
+  const [lessonNumber, setLessonNumber] = useState("");
+  const [description, setDescription] = useState("");
+  const [text, setText] = useState("");
   const [images, setImages] = useState<ImageListType>([]);
+
+  useEffect(() => {
+    if (id) {
+      dispatch(getSinglePost(id));
+    }
+  }, [dispatch, id]);
+
+  useEffect(() => {
+    if (singlePost && userInfo) {
+      if (singlePost.author === userInfo.id) {
+        setTitle(singlePost.title);
+        setLessonNumber(singlePost.lesson_num.toString());
+        setDescription(singlePost.description);
+        setText(singlePost?.text || "");
+        setImages([{ imageData: singlePost.image }]);
+      } else {
+        navigate(RoutesList.Home);
+      }
+    }
+  }, [singlePost?.id]);
+
   const onChange = (imageList: ImageListType, addUpdateIndex?: number[]) => {
     setImages(imageList);
   };
 
   const onNavigateToHome = () => {
-    navigate(RoutesList.Home)
-  }
+    navigate(RoutesList.Home);
+  };
 
   const onSubmit = () => {
-    const formData = new FormData()
+    const formData = new FormData();
     formData.append("title", title);
     formData.append("text", text);
     formData.append("description", description);
     formData.append("lesson_num", lessonNumber);
     formData.append("image", images[0].file as Blob);
-    dispatch(addNewPost({
-      data: formData, callback: onNavigateToHome
-    }))
-  }
+    if (singlePost?.author) {
+      formData.append("author", singlePost.author.toString());
+    }
+    const action = singlePost
+      ? editPost({
+        data: { postId: singlePost.id, newData: formData },
+        callback: onNavigateToHome,
+      })
+      : addNewPost({
+        data: formData,
+        callback: onNavigateToHome,
+      });
+    dispatch(action);
+  };
+
+  const onDeletePost = () => {
+    if (singlePost) {
+      dispatch(deletePost({ data: singlePost.id, callback: onNavigateToHome }));
+    }
+  };
 
   return (
-    <>
-      <Title title={'Add post'} />
+    <div className={styles.addPostContainer}>
+      <Title className={styles.title} title={"Add post"} />
 
-      <Input title={'Title'} placeholder={'Что-то на Титульном'} onChange={setTitle} value={title} />
+      <Input
+        className={styles.inputTitle}
+        title={"Title"}
+        placeholder={"Что-то на Титульном"}
+        onChange={setTitle}
+        value={title}
+      />
       <div>
-        <Input title={'Lesson number'} placeholder={'Что-то на Намбере'} onChange={setLessonNumber} value={lessonNumber} />
+        <div className={styles.wrapContainer}>
+          <Input
+            className={styles.inputLessonNumber}
+            title={"Lesson number"}
+            placeholder={"Enter Lesson Number"}
+            onChange={setLessonNumber}
+            value={lessonNumber}
+          />
 
-
-        <ImageUploading
-          value={images}
-          onChange={onChange}
-          dataURLKey="imageData"
-        >
-          {({
+          <ImageUploading
+            value={images}
+            onChange={onChange}
+            dataURLKey="imageData"
+          >
+            {({
               imageList,
               onImageUpload,
               onImageRemoveAll,
@@ -66,44 +122,89 @@ const AddPost = () => {
               isDragging,
               dragProps,
             }) => (
-            <div className="upload__image-wrapper">
-              {!imageList.length && <div className={classNames(styles.uploadImage, { [styles.uploadDragging]: isDragging })}
-                                         onClick={onImageUpload}
-                                         {...dragProps}
-              >
-                  Click or Drop here
-              </div>}
-              {!!imageList.length && <Button title={'Remove all images'} type={ButtonTypes.Primary} onClick={onImageRemoveAll} />}
-
-              {imageList.map((image, index) => (
-                <div key={index} className="image-item">
-                  <img src={image['imageData']} alt="" width="100" />
-                  <div className="image-item__btn-wrapper">
-                    <Button title={'Remove'} type={ButtonTypes.Primary} onClick={() => onImageRemove(index)} />
-                    <Button title={'Update '} type={ButtonTypes.Primary} onClick={() => onImageUpdate(index)} />
+              <div className={styles.uploadImageWrapper}>
+                {!imageList.length && (
+                  <div
+                    className={classNames(styles.uploadImage, {
+                      [styles.uploadDragging]: isDragging,
+                    })}
+                    onClick={onImageUpload}
+                    {...dragProps}
+                  >
+                    Click or Drop here
                   </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </ImageUploading>
+                )}
+                {!!imageList.length && (
+                  <Button
+                    title={"Remove all images"}
+                    type={ButtonTypes.Primary}
+                    onClick={onImageRemoveAll}
+                  />
+                )}
 
-
-      </div>
-      <Input isTextarea title={'Description'} placeholder={'Что-то на Description'} onChange={setDescription} value={description} />
-      <Input isTextarea title={'Text'} placeholder={'Add your text'} onChange={setText} value={text} />
-
-      <div>
-        <Button type={ButtonTypes.Error} title={'Delete post'} onClick={() => { }} />
-        <div>
-          <Button type={ButtonTypes.Secondary} title={'Cancel'} onClick={onNavigateToHome} />
-          <Button type={ButtonTypes.Primary} title={'Add post'} onClick={onSubmit} />
-
+                {imageList.map((image, index) => (
+                  <div key={index} className={styles.imageItem}>
+                    <img src={image["imageData"]} alt="" width="100" />
+                    <div className={styles.imageItemBtnWrapper}>
+                      <Button
+                        className={classNames(styles.allBtn)}
+                        title={"Remove"}
+                        type={ButtonTypes.Primary}
+                        onClick={() => onImageRemove(index)}
+                      />
+                      <Button
+                        className={classNames(styles.allBtn)}
+                        title={"Update "}
+                        type={ButtonTypes.Primary}
+                        onClick={() => onImageUpdate(index)}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </ImageUploading>
         </div>
       </div>
-    </>
-  );
+      <Input
+        className={styles.description}
+        isTextarea
+        title={"Description"}
+        placeholder={"Что-то на Description"}
+        onChange={setDescription}
+        value={description}
+      />
+      <Input
+        className={styles.text}
+        isTextarea
+        title={"Text"}
+        placeholder={"Add your text"}
+        onChange={setText}
+        value={text}
+      />
 
-}
+      <div className={styles.endBtnWrap}>
+        <Button
+          type={ButtonTypes.Error}
+          title={"Delete post"}
+          onClick={onDeletePost}
+          disabled={!singlePost?.id}
+        />
+        <div className={styles.endRightBtn}>
+          <Button
+            type={ButtonTypes.Secondary}
+            title={"Cancel"}
+            onClick={onNavigateToHome}
+          />
+          <Button
+            type={ButtonTypes.Primary}
+            title={singlePost?.id ? "Edit post" : "Add post"}
+            onClick={onSubmit}
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default AddPost;

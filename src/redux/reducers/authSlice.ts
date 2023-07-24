@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
-  ActivateUserPayload,
+  ActivateUserPayload, ResetPasswordConfirmationPayload, ResetPasswordPayload,
   SignInUserPayload,
   SignUpUserPayload,
   UserInfoPayload,
@@ -35,6 +35,11 @@ const authSlice = createSlice({
       state.userInfo = action.payload;
     },
     logoutUser: (_, __: PayloadAction<undefined>) => {},
+
+    resetPassword: (_, __: PayloadAction<ResetPasswordPayload>) => {},
+
+    resetPasswordConfirm: (_, __: PayloadAction<ResetPasswordConfirmationPayload>) => {},
+
   },
 });
 
@@ -46,6 +51,8 @@ export const {
   getUserInfo,
   setUserInfo,
   logoutUser,
+  resetPassword,
+  resetPasswordConfirm,
 } = authSlice.actions;
 
 export const AuthSelectors = {

@@ -12,6 +12,8 @@ import SignIn from "src/pages/SignIn";
 import Success from "src/pages/Success";
 import Search from "src/pages/Search";
 import AddPost from './AddPost/AddPost';
+import ResetPassword from "src/pages/ResetPassword";
+import ResetPasswordConfirmation from "src/pages/ResetPasswordConfirmation";
 
 export enum RoutesList {
     Home = "/",
@@ -22,6 +24,9 @@ export enum RoutesList {
     Success = "/sing-up/confirm/success",
     Search = "/posts/:search",
     AddPost = '/blog/posts/',
+    EditPost = "/posts/:id/edit",
+    ResetPassword = "/password/reset",
+    ResetPasswordConfirm = "/password/reset/confirm/:uid/:token",
     Default = "*",
 }
 
@@ -33,7 +38,7 @@ const Router = () => {
       if (isLoggedIn) {
         dispatch(getUserInfo());
       }
-    }, [isLoggedIn])
+    }, [dispatch, isLoggedIn])
 
     return (
         <BrowserRouter>
@@ -42,7 +47,7 @@ const Router = () => {
                     <Route path={RoutesList.Home} element={<Home />} />
                     <Route path={RoutesList.SignUp} element={!isLoggedIn ? <SignUp /> : <Navigate to={RoutesList.Home}/>} />
                     <Route path={RoutesList.SignIn} element={!isLoggedIn ? <SignIn /> : <Navigate to={RoutesList.Home}/>} />
-                    <Route path={RoutesList.SelectedPost} element={!isLoggedIn ? <SelectedPost /> : <Navigate to={RoutesList.Home}/>} />
+                    <Route path={RoutesList.SelectedPost} element={<SelectedPost />} />
                     <Route
                         path={RoutesList.RegistrationConfirmation}
                         element={!isLoggedIn ? <RegistrationConfirmation /> : <Navigate to={RoutesList.Home}/>}
@@ -54,7 +59,27 @@ const Router = () => {
                     />
                     <Route path={RoutesList.Search}
                            element={<Search/>}/>
-                    <Route path={RoutesList.AddPost} element={isLoggedIn ? <AddPost /> : <Navigate to={RoutesList.Home} />} />
+
+                    <Route
+                      path={RoutesList.AddPost}
+                      element={
+                          isLoggedIn ? <AddPost /> : <Navigate to={RoutesList.Home} />
+                      }
+                    />
+                    <Route
+                      path={RoutesList.EditPost}
+                      element={
+                          isLoggedIn ? <AddPost /> : <Navigate to={RoutesList.Home} />
+                      }
+                    />
+
+                  <Route path={RoutesList.ResetPassword}
+                         element={<ResetPassword/>}
+                         />
+
+                  <Route path={RoutesList.ResetPasswordConfirm}
+                         element={<ResetPasswordConfirmation/>}
+                  />
 
                 </Route>
             </Routes>

@@ -80,3 +80,23 @@ export type SetSearchedPostsPayload = Omit<SetPostsListPayload, "isOverwrite">; 
 
 export type AddPostDataPayload = PayloadWithDataAndCallback<any>
 
+export type DeletePostPayload = PayloadWithDataAndCallback<number>;
+
+export type EditPostData = {
+  postId: number;
+  newData: any;
+};
+
+export type EditPostPayload = PayloadWithDataAndCallback<EditPostData>;
+
+
+export type ResetPasswordPayload = PayloadWithDataAndCallback<string>;
+
+export type ResetPasswordConfirmationData = {
+  uid: string,
+  token: string,
+  new_password: string
+}
+
+export type ResetPasswordConfirmationPayload = PayloadWithDataAndCallback<ResetPasswordConfirmationData>;
+

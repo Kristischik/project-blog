@@ -12,13 +12,9 @@ import {Theme} from "src/@types";
 import {getSinglePost, PostSelectors} from "src/redux/reducers/postSlice";
 import {RoutesList} from "src/pages/Router";
 import Loader from "src/components/Loader";
+import Button, {ButtonTypes} from "src/components/Button";
+import {AuthSelectors} from "src/redux/reducers/authSlice";
 
-// type CardPostProps =
-// {
-//     image: string;
-//     text: string;
-//     title: string;
-// };
 
 const SelectedPost = () => {
 
@@ -28,6 +24,8 @@ const SelectedPost = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    const userInfo = useSelector(AuthSelectors.getUserInfo);
+
     const singlePost = useSelector(PostSelectors.getSinglePost);
     const isSinglePostLoading = useSelector(PostSelectors.getSinglePostLoading);
 
@@ -35,10 +33,14 @@ const SelectedPost = () => {
         if (id) {
             dispatch(getSinglePost(id));
         }
-    }, [id]);
+    }, [dispatch, id]);
 
     const onHomeClick = () => {
         navigate(RoutesList.Home);
+    };
+
+    const onClickEdit = () => {
+        navigate(`/posts/${singlePost?.id}/edit`);
     };
 
     return singlePost && !isSinglePostLoading  ? (
@@ -65,6 +67,13 @@ const SelectedPost = () => {
                 <div className={styles.iconRight}>
                     <BookmarkIcon />Add to favorites
                 </div>
+                {singlePost.author === userInfo?.id && (
+                  <Button
+                    type={ButtonTypes.Secondary}
+                    title={"Edit post"}
+                    onClick={onClickEdit}
+                  />
+                )}
             </div>
         </div>
 

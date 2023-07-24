@@ -1,7 +1,7 @@
 import { all, takeLatest, call, put } from "redux-saga/effects";
 import { ApiResponse } from "apisauce";
 import {
-  AddPostDataPayload,
+  AddPostDataPayload, DeletePostPayload, EditPostPayload,
   GetPostsPayload,
   GetPostsResponseData,
   GetSearchedPostsPayload,
@@ -9,7 +9,7 @@ import {
 } from "src/redux/@types";
 import API from "src/utils/api";
 import {
-  addNewPost,
+  addNewPost, deletePost, editPost,
   getMyPosts,
   getPostsList, getSearchedPosts,
   getSinglePost,
@@ -126,6 +126,33 @@ function* addPostWorker(action: PayloadAction<AddPostDataPayload>) {
   }
 }
 
+function* deletePostWorker(action: PayloadAction<DeletePostPayload>) {
+  const { data, callback } = action.payload;
+  const response: ApiResponse<undefined> = yield callCheckingAuth(
+    API.deletePost,
+    data
+  );
+  if (response.ok) {
+    callback();
+  } else {
+    console.error("Delete Post error", response.problem);
+  }
+}
+
+function* editPostWorker(action: PayloadAction<EditPostPayload>) {
+  const { data, callback } = action.payload;
+  const response: ApiResponse<undefined> = yield callCheckingAuth(
+    API.editPost,
+    data.postId,
+    data.newData
+  );
+  if (response.ok) {
+    callback();
+  } else {
+    console.error("Edit Post error", response.problem);
+  }
+}
+
 export default function* postSagaWatcher() {
   yield all([
     // takeLatest(getPostsList, postWorker),
@@ -134,5 +161,7 @@ export default function* postSagaWatcher() {
     takeLatest(getSearchedPosts, getSearchedPostsWorker),
     takeLatest(getPostsList, getPostsWorker),
     takeLatest(addNewPost, addPostWorker),
+    takeLatest(deletePost, deletePostWorker),
+    takeLatest(editPost, editPostWorker),
   ]);
 }
